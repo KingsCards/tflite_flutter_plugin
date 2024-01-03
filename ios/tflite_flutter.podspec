@@ -16,15 +16,19 @@ TensorFlow Lite plugin for Flutter apps.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '8.0'
+  s.platform = :ios, '14.0'
 
-  s.ios.vendored_frameworks = 'TensorFlowLiteC.framework', 'TensorFlowLiteCMetal.framework'
-  s.ios.deployment_target = '9.0'
-  # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
-  s.swift_version = '5.0'
-  s.library = 'c++'
-  # Fail early during build instead of not finding the library during runtime
-  s.xcconfig = { 'OTHER_LDFLAGS' => '-framework TensorFlowLiteC -all_load -framework TensorFlowLiteCMetal -all_load' }
+  tflite_version = '2.14.0'
+  s.dependency 'TensorFlowLiteSwift', tflite_version
+  s.dependency 'TensorFlowLiteSwift/Metal', tflite_version
+  s.dependency 'TensorFlowLiteSwift/CoreML', tflite_version
 
+  s.ios.deployment_target = '14.0'
+
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+
+  s.user_target_xcconfig = {
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386'
+  }
+  s.static_framework = true
 end
